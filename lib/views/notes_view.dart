@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_app/views/search_view.dart';
 import 'package:note_app/views/widgets/custom_app_bar.dart';
 import 'package:note_app/views/widgets/custom_floating_action_button.dart';
 import 'package:note_app/views/widgets/notes_listview.dart';
@@ -8,14 +9,22 @@ class NoteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        floatingActionButton: CustomFloatingActionButton(),
+    return Scaffold(
+        floatingActionButton: const CustomFloatingActionButton(),
         body: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              CustomAppBar(title: 'Notes',icon: Icons.search,),
-              NotesListView(),
+              CustomAppBar(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const SearchView();
+                  }));
+                },
+                title: 'Notes',
+                icon: Icons.search,
+              ),
+              const NotesListView(),
             ],
           ),
         ));

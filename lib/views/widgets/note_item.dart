@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:note_app/cubits/notes_cubit/notes_cubit.dart';
+import 'package:note_app/models/note_model.dart';
 import 'package:note_app/views/edit_note_view.dart';
 
 class NoteItem extends StatelessWidget {
   const NoteItem({
     super.key,
+    required this.note,
   });
+  final NoteModel note;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +20,7 @@ class NoteItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const EditNoteView();
+              return  EditNoteView(note : note);
             },
           ),
         );
@@ -23,7 +28,7 @@ class NoteItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: const Color(0xffFFCD7A),
+          color: Color(note.color),
         ),
         margin: const EdgeInsets.only(
           top: 8,
@@ -37,23 +42,26 @@ class NoteItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             ListTile(
-              title: const Text("Note title",
-                  style: TextStyle(fontSize: 30, color: Colors.black)),
+              title: Text(note.title,
+                  style: const TextStyle(fontSize: 30, color: Colors.black)),
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 16),
-                child: Text("Note content",
+                child: Text(note.content,
                     style: TextStyle(
                         fontSize: 20, color: Colors.black.withOpacity(0.6))),
               ),
               trailing: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    note.delete();
+                    BlocProvider.of<NotesCubit>(context).getAllNotes();
+                  },
                   icon: const Icon(FontAwesomeIcons.trash,
                       size: 24, color: Colors.black)),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 32, top: 16),
               child: Text(
-                "Note created on ",
+                note.date,
                 style: TextStyle(
                     fontSize: 16, color: Colors.black.withOpacity(0.6)),
               ),
